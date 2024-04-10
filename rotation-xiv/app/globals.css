@@ -3,19 +3,9 @@
 @tailwind utilities;
 
 h1 {
-  font-size: 24px;
+  font-family: var(--font-merriweather);
 }
 
-button {
-  background: #fff;
-  border: 1px solid #999;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: auto;
-  height: auto;
-  margin-left: 5px;
-  padding-right: 2px;
-  padding-left: 2px;
-  text-align: center;
-  width: auto;
+p {
+  font-family: var(--font-rubik);
 }
