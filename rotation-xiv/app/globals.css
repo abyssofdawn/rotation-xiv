@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1 {
+  font-size: 24px;
+}
+
+button {
+  background: #fff;
+  border: 1px solid #999;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: auto;
+  height: auto;
+  margin-left: 5px;
+  padding-right: 2px;
+  padding-left: 2px;
+  text-align: center;
+  width: auto;
+}
