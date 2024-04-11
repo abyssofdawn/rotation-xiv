@@ -2,6 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* FIREFOX */
+@-moz-document url-prefix() {
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+
+  }
+}
+
+* {
+  scrollbar-gutter: stable both-edges;
+}
+/* CHROME */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+}
+
 h1 {
   font-family: var(--font-merriweather);
 }

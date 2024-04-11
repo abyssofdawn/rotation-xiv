@@ -1,85 +1,42 @@
+'use client'
+
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { NextApiRequest, NextApiResponse } from 'next';
 import parse from 'html-react-parser'
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
+import { ParsedDescription, class_names, skills_for_class } from './utils';
 
+type Skill = { ID: number, Name: string, IconHD: string, Description: string }
+type Search = {Pagination: {}, Results: [Skill], SpeedMs: number}
 
-async function GetSkillsForClass(): Promise<any> {
-  const headers: Headers = new Headers()
-  headers.set('Content-Type', 'application/json')
+const classnames = class_names();
+function GetSkillsForClass({classjob = 'white mage'}) {
 
-  headers.set('Accept', 'application/json')
+  if(!classnames.includes(classjob)) return <div>invalid class name</div>
 
-  const request: RequestInfo = new Request('https://xivapi.com/search', {
-    method: 'POST',
-    headers: headers,
-    mode: 'cors',
-    body: JSON.stringify(
-      {
-        "indexes": "Action",
-        "columns": "ID,Name,IconHD,Description",
-        "body": {
-          "query": {
-            "bool": {
-              "must": [
-                {
-                  "match": {
-                    "ClassJob.Name_en": "white mage"
-                  }
-                }
-              ],
-              "filter": [
-                {
-                  "term": {
-                    "IsPvP": 0
-                  }
-                }
-              ]
-            }
-          },
-          "from": 0,
-          "size": 50
-        }
-      }
-    )
-  })
+  const {skills, skillserror, skillsloading} = skills_for_class(classjob);  
 
-  const res = await fetch(request)
-  if(!res.ok){
-    throw new Error("failed to fetch skills")
-  }
-  type Skill = { ID: number, Name: string, IconHD: string, Description: string }
-  type Search = {Pagination: {}, Results: [Skill], SpeedMs: number}
+  if(skillsloading) return <div>Loading...</div>;
+  if(skillserror) return <div>Error</div>;
 
-
-  const data: Search = await res.json()
+  const skilllist = skills.Results
   
-  const skills: Skill[] = data.Results
-  console.log(skills)
-  return(
+  return (
     <div>
-    {skills.map(skill => 
-      <li key={skill.ID} className='top shrink-0 max-w-lg mx-auto my-2 bg-light-bg-3 dark:bg-dark-bg-2 rounded-md border dark:border-dark-bg-5 border-light-grey-0 flex gap-2'>
+    {skilllist.map((skill: Skill) => 
+      <li key={skill.ID} className='top shrink-0 max-w-lg h-28 mx-auto my-2 bg-light-bg-3 dark:bg-dark-bg-2 rounded-md border-2 dark:border-dark-bg-5 border-light-grey-0 flex gap-2'>
         <div/>
-        <div className='shrink-0 my-2'>
-          <img className='w-10' src={'https://xivapi.com/'+skill.IconHD} alt={skill.Name} />
+        <div className='shrink-0 my-2 flex-col flex'>
+          <img className='w-10 grow-0 outline-2 rounded-md' src={'https://xivapi.com/'+skill.IconHD} alt={skill.Name} />
+          <div className=''></div>
         </div>
         
-        <div className='divide-y-[1px] grow divide-dark-bg-5'>
-          <h1>{skill.Name}</h1>
-          <div className='max-h-28 overflow-y-scroll text-sm mb-2'>
-            {
-              parse(
-                skill.Description
-                  .replaceAll("<br />", "\n")
-                  .replaceAll("\n\n", "")
-                  .replaceAll(".", ".<br>")
-                  .replaceAll('<br><span', '<span')
-                  .replaceAll('<span style="color:#00cc22;">', '<br/><span className="text-light-green dark:text-dark-faded-green">')
-                  .replaceAll('<span style="color:#ffff66;">', '<span className="text-light-yellow dark:text-dark-faded-yellow">')
-                  .replaceAll('<span style="color:#ff7b1a;">', '<span className="text-light-orange dark:text-dark-faded-orange">')
-              )
-            }
+        <div className='divide-y-2 grow dark:divide-dark-bg-5 divide-light-grey-0'>
+          <h1>{skill.Name} ({skill.ID})</h1>
+          <div className='max-h-20 overflow-y-scroll text-sm mb-2'>
+            <ParsedDescription description={skill.Description} />
           </div>
         </div>
       </li>
@@ -88,16 +45,21 @@ async function GetSkillsForClass(): Promise<any> {
   )
 }
 
-export default async function Page() {
-
-
-return (
-  <div className="padded">
+export default function Page() {
+  
+  const [ classjob, setClassjob ] = useState('gunbreaker');
+  
+  return (
+    <div className="padded">
     <h1>Hello, Next.js!</h1>
     <button type="button">
       Dashboard 
     </button>
-    <GetSkillsForClass />
+    <input 
+      onChange={e => setClassjob(e.target.value)}
+      value={classjob}
+      ></input>
+    <GetSkillsForClass classjob={classjob}/>
   </div>
 );
 }
