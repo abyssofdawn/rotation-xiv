@@ -5,7 +5,7 @@ async function SkillIcon() {
     let icon;
     let name;
     let description = "";
-    await fetch('https://xivapi.com/Action/24283')
+    await fetch('https://xivapi.com/Action/16138')
         .then(res => res.json())
         .then(data => skilldata = data)
         .then(() => {
@@ -13,15 +13,19 @@ async function SkillIcon() {
                 icon = "https://xivapi.com/" + skilldata.IconHD;
                 name = skilldata.Name_en;
                 description = skilldata.Description;
-                description = description.replaceAll("\n", "<br>");
+                if(description){
+                  description = description.replaceAll("\n\n", "<br>");
+                }
             }
         })
     return(
         <div className="flex gap-2 items-center">
 
-            <img className="border-dark-bg-5 rounded-md border-2 w-8" src={icon} title={name}/>
-            <p>{name}:</p>
-            <div>{parse('<span>'+description)}</div>
+            <img className="border-dark-bg-5 rounded-md border-2 w-12" src={icon} title={name}/>
+            <div className=' divide-y w-fit'>
+              <h1>{name}</h1>
+              <div>{parse('<span>'+description)}</div>
+            </div>
         </div>
     )
 }

@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${merriweather.variable} ${inter.variable} dark`}>
+    <html lang="en" className={`${merriweather.variable} ${inter.variable} `}>
       <body className="dark:bg-dark-bg-dim dark:text-dark-fg bg-light-bg-0 text-light-fg">{children}</body>
     </html>
   );
