@@ -6,11 +6,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import parse from 'html-react-parser'
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { DarkThemeToggle, ParsedDescription, ThemeSwitch, class_names, skills_for_class } from './utils';
+import { DarkThemeToggle, ParsedDescription, Skill, ThemeSwitch, class_names, parse_description, skills_for_class } from './utils';
 
-import {Flowbite} from 'flowbite-react'
+import {Button, Flowbite, Popover} from 'flowbite-react'
+import { DescriptionCard } from './components/descriptioncard';
 
-type Skill = { ID: number, Name: string, IconHD: string, Description: string }
 type Search = {Pagination: {}, Results: [Skill], SpeedMs: number}
 
 const classnames = class_names();
@@ -23,25 +23,25 @@ function GetSkillsForClass({classjob = 'white mage'}) {
   if(skillsloading) return <div>Loading...</div>;
   if(skillserror) return <div>Error</div>;
 
-  const skilllist = skills.Results
+  const skilllist: Skill[] = skills.Results
+
+  skilllist.forEach((skill: Skill) => {
+
+    skill.Description = parse_description(skill.Description)
+  });
   
   return (
-    <div>
+    <div className='ml-2 h-full flex flex-wrap gap-0'>
     {skilllist.map((skill: Skill) => 
-      <li key={skill.ID} className='top '>
-        <div/>
-        <div className='shrink-0 my-2 flex-col flex'>
-          <img className='w-10 grow-0 outline-2 rounded-md' src={'https://xivapi.com/'+skill.IconHD} alt={skill.Name} />
-          <div className=''></div>
-        </div>
-        
-        <div className='divide-y-2 grow dark:divide-dark-bg-5 divide-light-grey-0'>
-          <h1>{skill.Name} ({skill.ID})</h1>
-          <div className='max-h-20 overflow-y-scroll text-sm mb-2'>
-            <ParsedDescription description={skill.Description} />
+      <div key={skill.ID} className='mx-auto'>
+        <Popover
+          content={<DescriptionCard skill={skill} />}
+        >
+          <div className='flex shrink-0 w-fit p-2 mx-auto bg-light-bg-3 dark:bg-dark-bg-2 rounded-md border-2 dark:border-dark-bg-5 border-light-grey-0'>
+            <img className='w-10 grow-0 outline-2 rounded-md shrink-0' src={'https://xivapi.com/'+skill.IconHD} alt={skill.Name} />
           </div>
-        </div>
-      </li>
+        </Popover>
+      </div>
     )}
     </div>
   )
@@ -53,17 +53,14 @@ export default function Page() {
   
   return (
   <Flowbite>
-    <ThemeSwitch/>
-    <div className="padded">
-      <h1>Hello, Next.js!</h1>
-      <button type="button">
-        Dashboard 
-      </button>
+    <div className='flex-col'>
       <input 
         onChange={e => setClassjob(e.target.value)}
         value={classjob}
         ></input>
-      <GetSkillsForClass classjob={classjob}/>
+      <div className='grow'>
+        <GetSkillsForClass classjob={classjob}/>
+      </div>
     </div>
   </Flowbite>
 );

@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-li {
-  @apply shrink-0 max-w-lg h-28 mx-auto my-2 bg-light-bg-3 dark:bg-dark-bg-2 rounded-md border-2 dark:border-dark-bg-5 border-light-grey-0 flex gap-2
+
+.hbutton {
+  @apply p-2 rounded-md hover:bg-light-bg-5 hover:dark:bg-dark-bg-5 
 }
 
 /* FIREFOX */
@@ -11,13 +12,10 @@ li {
 * {
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
-
+    scrollbar-base-color: blue;
   }
 }
 
-* {
-  scrollbar-gutter: stable both-edges;
-}
 /* CHROME */
 ::-webkit-scrollbar {
   width: 0.5rem;
