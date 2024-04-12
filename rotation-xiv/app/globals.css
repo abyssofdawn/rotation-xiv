@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+li {
+  @apply shrink-0 max-w-lg h-28 mx-auto my-2 bg-light-bg-3 dark:bg-dark-bg-2 rounded-md border-2 dark:border-dark-bg-5 border-light-grey-0 flex gap-2
+}
+
 /* FIREFOX */
 @-moz-document url-prefix() {
 * {

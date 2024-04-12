@@ -1,6 +1,7 @@
-export const dynamic = 'force-dynamic'
-export async function GET(requestin: Request) {
-  const jobname = requestin.body
+import { type NextRequest } from 'next/server'
+
+export async function GET(requestin: NextRequest) {
+  const jobname = requestin.nextUrl.searchParams.get("job")
   console.log(jobname)
   const headers: Headers = new Headers()
   headers.set('Content-Type', 'application/json')
@@ -21,7 +22,7 @@ export async function GET(requestin: Request) {
               "must": [
                 {
                   "match": {
-                    "ClassJob.Name_en": "warrior"
+                    "ClassJob.Name_en": jobname ? jobname : "warrior"
                   }
                 }
               ]

@@ -6,7 +6,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import parse from 'html-react-parser'
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { ParsedDescription, class_names, skills_for_class } from './utils';
+import { DarkThemeToggle, ParsedDescription, ThemeSwitch, class_names, skills_for_class } from './utils';
+
+import {Flowbite} from 'flowbite-react'
 
 type Skill = { ID: number, Name: string, IconHD: string, Description: string }
 type Search = {Pagination: {}, Results: [Skill], SpeedMs: number}
@@ -26,7 +28,7 @@ function GetSkillsForClass({classjob = 'white mage'}) {
   return (
     <div>
     {skilllist.map((skill: Skill) => 
-      <li key={skill.ID} className='top shrink-0 max-w-lg h-28 mx-auto my-2 bg-light-bg-3 dark:bg-dark-bg-2 rounded-md border-2 dark:border-dark-bg-5 border-light-grey-0 flex gap-2'>
+      <li key={skill.ID} className='top '>
         <div/>
         <div className='shrink-0 my-2 flex-col flex'>
           <img className='w-10 grow-0 outline-2 rounded-md' src={'https://xivapi.com/'+skill.IconHD} alt={skill.Name} />
@@ -50,16 +52,19 @@ export default function Page() {
   const [ classjob, setClassjob ] = useState('gunbreaker');
   
   return (
+  <Flowbite>
+    <ThemeSwitch/>
     <div className="padded">
-    <h1>Hello, Next.js!</h1>
-    <button type="button">
-      Dashboard 
-    </button>
-    <input 
-      onChange={e => setClassjob(e.target.value)}
-      value={classjob}
-      ></input>
-    <GetSkillsForClass classjob={classjob}/>
-  </div>
+      <h1>Hello, Next.js!</h1>
+      <button type="button">
+        Dashboard 
+      </button>
+      <input 
+        onChange={e => setClassjob(e.target.value)}
+        value={classjob}
+        ></input>
+      <GetSkillsForClass classjob={classjob}/>
+    </div>
+  </Flowbite>
 );
 }
