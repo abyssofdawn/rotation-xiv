@@ -2,7 +2,6 @@ import { type NextRequest } from 'next/server'
 
 export async function GET(requestin: NextRequest) {
   const jobname = requestin.nextUrl.searchParams.get("job")
-  console.log(jobname)
   const headers: Headers = new Headers()
   headers.set('Content-Type', 'application/json')
 
@@ -25,9 +24,18 @@ export async function GET(requestin: NextRequest) {
                     "ClassJob.Name_en": jobname ? jobname : "warrior"
                   }
                 }
+              ],
+              "filter": [
+                {
+                  "match": {
+                    "IsPvP": 0
+                  }
+                }
               ]
             }
+
           },
+
           "from": 0,
           "size": 500
         }

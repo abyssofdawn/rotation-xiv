@@ -20,14 +20,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${merriweather.variable} ${inter.variable}`} suppressHydrationWarning>
       <body>
-          <Providers>
-            <div className="dark:bg-dark-bg-dim dark:text-dark-fg bg-light-bg-0 text-light-fg flex flex-col h-screen">
-              <div>
-                  <Navigation />
-              </div>
-              <div className="max-h-full overflow-y-scroll">
-                {children}
-              </div>
+        <Providers>
+          <div className="dark:bg-dark-bg-dim dark:text-dark-fg bg-light-bg-0 text-light-fg flex flex-col h-screen">
+            <div>
+                <Navigation />
+            </div>
+            <div className="max-h-full overflow-y-scroll">
+              {children}
+            </div>
           </div>
         </Providers>
       </body>

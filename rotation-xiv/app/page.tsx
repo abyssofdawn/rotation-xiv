@@ -6,10 +6,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import parse from 'html-react-parser'
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { DarkThemeToggle, ParsedDescription, Skill, ThemeSwitch, class_names, parse_description, skills_for_class } from './utils';
+import { ParsedDescription, Skill, ThemeSwitch, class_names, parse_description, skills_for_class } from './utils';
 
-import {Button, Flowbite, Popover} from 'flowbite-react'
 import { DescriptionCard } from './components/descriptioncard';
+import { SkillSquare } from './components/skillsquare';
+import TimelineSkill from './components/skillintimeline';
 
 type Search = {Pagination: {}, Results: [Skill], SpeedMs: number}
 
@@ -31,16 +32,10 @@ function GetSkillsForClass({classjob = 'white mage'}) {
   });
   
   return (
-    <div className='ml-2 h-full flex flex-wrap gap-0'>
+    <div className='h-full ml-2 flex flex-col gap-2 justify-start'>
     {skilllist.map((skill: Skill) => 
-      <div key={skill.ID} className='mx-auto'>
-        <Popover
-          content={<DescriptionCard skill={skill} />}
-        >
-          <div className='flex shrink-0 w-fit p-2 mx-auto bg-light-bg-3 dark:bg-dark-bg-2 rounded-md border-2 dark:border-dark-bg-5 border-light-grey-0'>
-            <img className='w-10 grow-0 outline-2 rounded-md shrink-0' src={'https://xivapi.com/'+skill.IconHD} alt={skill.Name} />
-          </div>
-        </Popover>
+      <div key={skill.ID} className='grow-0 w-fit'>
+          <div><SkillSquare skill={skill}/></div>
       </div>
     )}
     </div>
@@ -50,18 +45,62 @@ function GetSkillsForClass({classjob = 'white mage'}) {
 export default function Page() {
   
   const [ classjob, setClassjob ] = useState('gunbreaker');
-  
+  const [ gcd, setGcd ] = useState(2.5); 
+
+  const [ cwidth, setCwidth ] = useState(200);
+
+  const enableDropping = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+  }
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    const id = e.dataTransfer.getData('skill');
+    console.log(`${id}`)
+  }
+
+  const handleClick = () => {
+    const canvas: HTMLElement | null = document.getElementById('timeline')
+    if(canvas) {
+      const ctx = (canvas as HTMLCanvasElement).getContext('2d')
+      if(!ctx) return;
+      ctx.fillStyle = "rgb(128,128,128)"
+      ctx.fillRect(cwidth, 50, 50, 50)
+    }
+    
+  }
+
   return (
-  <Flowbite>
-    <div className='flex-col'>
+    <div className='flex-col relative'>
       <input 
         onChange={e => setClassjob(e.target.value)}
         value={classjob}
-        ></input>
+        className='hinput'
+      />
+      <br />
+      <input 
+        type='number'
+        onChange={e => setGcd(e.target.valueAsNumber)}
+        value={gcd}
+        className='hinput'
+        step={0.1}
+      />
+      <br />
+      <button
+        onClick={handleClick}
+        value={cwidth}
+        className='hbutton w-8 h-8 border-white border-2'
+      />      
+      <button
+        onClick={e => setCwidth(cwidth+100)}
+        value={cwidth}
+        className='hbutton w-8 h-8 border-white border-2'
+      />
+      <TimelineSkill time={200}></TimelineSkill>
+      <canvas id='timeline' width={cwidth} height={200} className='border-2 border-light-grey-0 dark:border-dark-bg-5 rounded-md'></canvas>
+      <div className='w-20 h-20 border-2' onDragOver={enableDropping} onDrop={handleDrop}></div>
       <div className='grow'>
         <GetSkillsForClass classjob={classjob}/>
       </div>
     </div>
-  </Flowbite>
 );
 }
