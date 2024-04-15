@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react"
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react"
 
-export default function Timeline(props: {}) {
-    const canvasRef = useRef(null)
+
+export default function Timeline(props: React.CanvasHTMLAttributes<HTMLCanvasElement> | React.HTMLAttributes<HTMLCanvasElement>) {
+    const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
     const draw = (ctx: CanvasRenderingContext2D) => {
         ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height)
@@ -10,14 +11,16 @@ export default function Timeline(props: {}) {
     }
 
     useEffect(() => {
-        const canvas: HTMLElement | null = canvasRef.current as (HTMLElement | null)
-        if(canvas){
-            const context = (canvas as HTMLCanvasElement).getContext('2d')
-            if(context) {
-                draw(context)
-            }
-        }
-    })
+        const canvas = canvasRef.current
+        if(!canvas) return
+    
+        const ctx = (canvas as HTMLCanvasElement).getContext('2d')
+        if(!ctx) return
 
-    return <canvas ref={canvasRef}></canvas>
+        ctx.fillStyle = '#ffffff'
+        ctx.fillRect(0, 0, 100, 100)        
+    
+    }, [])
+
+    return <canvas ref={canvasRef} className={props.className}></canvas>
 }

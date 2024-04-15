@@ -1,16 +1,10 @@
-'use client'
+'use client';
+import { useState } from 'react';
+import { Skill, class_names, parse_description, skills_for_class } from './utils';
 
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { NextApiRequest, NextApiResponse } from 'next';
-import parse from 'html-react-parser'
-import { useEffect, useState } from 'react';
-import useSWR from 'swr';
-import { ParsedDescription, Skill, ThemeSwitch, class_names, parse_description, skills_for_class } from './utils';
-
-import { DescriptionCard } from './components/descriptioncard';
 import { SkillSquare } from './components/skillsquare';
 import TimelineSkill from './components/skillintimeline';
+import Timeline from './components/timeline';
 
 type Search = {Pagination: {}, Results: [Skill], SpeedMs: number}
 
@@ -96,7 +90,7 @@ export default function Page() {
         className='hbutton w-8 h-8 border-white border-2'
       />
       <TimelineSkill time={200}></TimelineSkill>
-      <canvas id='timeline' width={cwidth} height={200} className='border-2 border-light-grey-0 dark:border-dark-bg-5 rounded-md'></canvas>
+      <Timeline width={cwidth} height={200} className='border-2 border-white rounded-md'/>
       <div className='w-20 h-20 border-2' onDragOver={enableDropping} onDrop={handleDrop}></div>
       <div className='grow'>
         <GetSkillsForClass classjob={classjob}/>
