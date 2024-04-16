@@ -11,7 +11,9 @@ export function Navigation() {
 
     ">
       <div className="p-2 shrink-0">
-        <img src='./favicon.ico' className="w-10 h-10"/>
+        <picture>
+          <img alt="ToolsXIV" src='./favicon.ico' className="w-10 h-10"/>
+        </picture>
       </div>
       <div><h1 className="text-2xl">Rotation Builder</h1></div>
       <div className="grow" />

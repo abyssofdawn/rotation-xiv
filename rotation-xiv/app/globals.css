@@ -11,6 +11,11 @@
   @apply rounded-md hover:bg-light-bg-5 hover:dark:bg-dark-bg-5 p-2 h-6 text-light-fg dark:text-dark-fg bg-light-bg-3 dark:bg-dark-bg-3 border-2 dark:border-dark-bg-5 border-light-grey-0
 }
 
+.skillshadow {
+  @apply border-light-grey-0;
+  @apply dark:border-dark-bg-5;
+}
+
 /* FIREFOX */
 @-moz-document url-prefix() {
 * {

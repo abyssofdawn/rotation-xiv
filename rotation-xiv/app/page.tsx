@@ -1,19 +1,21 @@
 'use client';
 import { useState } from 'react';
-import { Skill, class_names, parse_description, skills_for_class } from './utils';
+import { Skill, class_names, parse_description, useSkillsForClass } from './utils';
 
 import { SkillSquare } from './components/skillsquare';
 import TimelineSkill from './components/skillintimeline';
-import Timeline from './components/timeline';
+import { Draggable } from './components/draggable';
 
 type Search = {Pagination: {}, Results: [Skill], SpeedMs: number}
 
 const classnames = class_names();
 function GetSkillsForClass({classjob = 'white mage'}) {
+  let validClassName = classnames.includes(classjob);
 
-  if(!classnames.includes(classjob)) return <div>invalid class name</div>
-
-  const {skills, skillserror, skillsloading} = skills_for_class(classjob);  
+  const {skills, skillserror, skillsloading} = useSkillsForClass(validClassName ? classjob : "none");  
+  if(!classnames.includes(classjob)) {
+    return <div>invalid class name</div>
+  }
 
   if(skillsloading) return <div>Loading...</div>;
   if(skillserror) return <div>Error</div>;
@@ -24,13 +26,29 @@ function GetSkillsForClass({classjob = 'white mage'}) {
 
     skill.Description = parse_description(skill.Description)
   });
-  
+
+  const handleDrag = (skill: Skill, offset: number[]) => {
+    console.log(`${offset[0]} ${offset[1]}`)
+    console.log(skill.ID)
+  }
+
+  const handleClick = (skill: Skill) => {
+    console.log(skill.ID)
+  }
+
   return (
     <div className='h-full ml-2 flex flex-col gap-2 justify-start'>
     {skilllist.map((skill: Skill) => 
-      <div key={skill.ID} className='grow-0 w-fit'>
-          <div><SkillSquare skill={skill}/></div>
-      </div>
+      <Draggable
+        key={skill.ID}
+        dragObject={skill}
+        onDrag={(skill: Skill, offset: number[]) => handleDrag(skill, offset)}
+        onMouseUp={(skill: Skill) => handleClick(skill)}
+        >
+        <div className='grow-0 w-fit'>
+          <SkillSquare skill={skill}/>
+        </div>
+      </Draggable>
     )}
     </div>
   )
@@ -42,11 +60,6 @@ export default function Page() {
   const [ gcd, setGcd ] = useState(2.5); 
 
   const [ cwidth, setCwidth ] = useState(200);
-
-  const enableDropping = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-  }
-
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     const id = e.dataTransfer.getData('skill');
     console.log(`${id}`)
@@ -82,16 +95,14 @@ export default function Page() {
       <button
         onClick={handleClick}
         value={cwidth}
-        className='hbutton w-8 h-8 border-white border-2'
+        className='hbutton w-8 h-8 border-white border'
       />      
       <button
         onClick={e => setCwidth(cwidth+100)}
         value={cwidth}
-        className='hbutton w-8 h-8 border-white border-2'
+        className='hbutton w-8 h-8 border-white border'
       />
       <TimelineSkill time={200}></TimelineSkill>
-      <Timeline width={cwidth} height={200} className='border-2 border-white rounded-md'/>
-      <div className='w-20 h-20 border-2' onDragOver={enableDropping} onDrop={handleDrop}></div>
       <div className='grow'>
         <GetSkillsForClass classjob={classjob}/>
       </div>

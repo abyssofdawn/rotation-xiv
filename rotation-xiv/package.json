@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "json-server": "json-server --watch db.json --port 5500",
+    "concurrent": "concurrently \"json-server --watch db.json --port 5500\" \"next dev\""
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -14,7 +16,10 @@
     "@mui/base": "^5.0.0-beta.40",
     "@mui/system": "^5.15.15",
     "clsx": "^2.1.0",
+    "concurrently": "^8.2.2",
+    "d3": "^7.9.0",
     "flowbite": "^2.3.0",
+    "json-server": "^1.0.0-alpha.23",
     "next": "14.1.4",
     "next-themes": "^0.3.0",
     "react": "^18",

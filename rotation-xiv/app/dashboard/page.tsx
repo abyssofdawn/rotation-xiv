@@ -1,4 +1,4 @@
-import parse from 'html-react-parser'
+import parse from 'html-react-parser';
 
 async function SkillIcon() {
     let skilldata: { IconHD: string; Name_en: string; Description: string;};
@@ -20,8 +20,9 @@ async function SkillIcon() {
         })
     return(
         <div className="flex gap-2 items-center">
-
-            <img className="border-dark-bg-5 rounded-md border-2 w-12" src={icon} title={name}/>
+            <picture>
+                <img alt="blah blah" className="border-dark-bg-5 rounded-md border w-12" src={icon} title={name}/>
+            </picture>
             <div className=' divide-y w-fit'>
               <h1>{name}</h1>
               <div>{parse('<span>'+description)}</div>
