@@ -11,7 +11,20 @@ import clsx from 'clsx';
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
-export type Skill = { ID: number, Name: string, IconHD: string, Description: string }
+export type Skill = { ID: number, Name: string, IconHD: string, Description: string, ActionCategory: {ID: number} }
+export type TSkill = { 
+  skill: number,              //the skill's id, so i don't pass kilobytes per skill
+  delay: number               //the delay on the skill, used to offset and check "clipping"
+}
+
+export type Timeline = {
+  skills: {
+    gcd: TSkill,              //the gcd
+    slots?: TSkill[],         //all ogcds
+    start: number,            //start time
+    end: number               //end time = max of recast, sum of animation lock and skill delay
+  }[]
+}
 
 export function parse_description(description: string) {
   return description

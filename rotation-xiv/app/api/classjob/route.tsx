@@ -14,7 +14,7 @@ export async function GET(requestin: NextRequest) {
     body: JSON.stringify(
       {
         "indexes": "Action",
-        "columns": "ID,Name,IconHD,Description",
+        "columns": "ID,Name,IconHD,Description,ActionCategory",
         "body": {
           "query": {
             "bool": {

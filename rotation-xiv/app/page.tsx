@@ -1,10 +1,10 @@
-'use client';
+'use client';;
 import { useState } from 'react';
-import { Skill, class_names, parse_description, useSkillsForClass } from './utils';
+import { Skill, class_names, parse_description, useSkillsForClass, Timeline } from './utils';
 
 import { SkillSquare } from './components/skillsquare';
-import TimelineSkill from './components/skillintimeline';
 import { Draggable } from './components/draggable';
+import { TimelineComponent } from './components/timeline';
 
 type Search = {Pagination: {}, Results: [Skill], SpeedMs: number}
 
@@ -58,6 +58,7 @@ export default function Page() {
   
   const [ classjob, setClassjob ] = useState('gunbreaker');
   const [ gcd, setGcd ] = useState(2.5); 
+  const [ timeline, setTimeline ] = useState<Timeline>({skills: []})
 
   const [ cwidth, setCwidth ] = useState(200);
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -102,10 +103,16 @@ export default function Page() {
         value={cwidth}
         className='hbutton w-8 h-8 border-white border'
       />
-      <TimelineSkill time={200}></TimelineSkill>
+
+
+      <TimelineComponent />
+
+
       <div className='grow'>
         <GetSkillsForClass classjob={classjob}/>
       </div>
+
+
     </div>
 );
 }

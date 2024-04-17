@@ -6,11 +6,11 @@ export const Draggable = (props: {children: ReactNode, dragObject: any, onDragSt
     const onDragStarting = (e: React.DragEvent<HTMLDivElement>) => {
         if(!props.onDragStart) return
         // Get the block coordinates
-
+        let currenttargetrect = e.currentTarget.getBoundingClientRect();
         // Find the offset of the mouse from those coordinates
         const offset = [
-            e.clientX, 
-            e.clientY
+            e.clientX - currenttargetrect.left, 
+            e.clientY - currenttargetrect.top
         ];
         // Pass the drag data
         props.onDragStart(props.dragObject, offset);
@@ -19,11 +19,11 @@ export const Draggable = (props: {children: ReactNode, dragObject: any, onDragSt
     const onDragging = (e: React.DragEvent<HTMLDivElement>) => {
         if(!props.onDrag) return
         // Get the block coordinates
-
+        let currenttargetrect = e.currentTarget.getBoundingClientRect();
         // Find the offset of the mouse from those coordinates
         const offset = [
-            e.clientX, 
-            e.clientY
+            e.clientX - currenttargetrect.left, 
+            e.clientY - currenttargetrect.top
         ];
         // Pass the drag data
         props.onDrag(props.dragObject, offset);
@@ -31,11 +31,11 @@ export const Draggable = (props: {children: ReactNode, dragObject: any, onDragSt
 
     const onDragEnding = (e: React.DragEvent<HTMLDivElement>) => {
         if(!props.onDragEnd) return
-
+        let currenttargetrect = e.currentTarget.getBoundingClientRect();
         // Find the offset of the mouse from those coordinates
         const offset = [
-            e.clientX, 
-            e.clientY
+            e.clientX - currenttargetrect.left, 
+            e.clientY - currenttargetrect.top
         ];
         e.stopPropagation();
         props.onDragEnd(props.dragObject, offset);
