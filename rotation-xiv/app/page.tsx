@@ -35,10 +35,7 @@ function GetSkillsForClass({ classjob = "white mage" }) {
     skill.Description = parse_description(skill.Description);
   });
 
-  const handleDrag = (skill: Skill, offset: number[]) => {
-    console.log(`${offset[0]} ${offset[1]}`);
-    console.log(skill.ID);
-  };
+  const handleDrag = (skill: Skill, offset: number[]) => {};
 
   const handleClick = (skill: Skill) => {
     console.log(skill.ID);
@@ -65,7 +62,19 @@ function GetSkillsForClass({ classjob = "white mage" }) {
 export default function Page() {
   const [classjob, setClassjob] = useState("gunbreaker");
   const [gcd, setGcd] = useState(2.5);
-  const [timeline, setTimeline] = useState<Timeline>({ skills: [] });
+  const [timeline, setTimeline] = useState<Timeline>({
+    skills: [
+      {
+        gcd: {
+          skill: 16139,
+          icon: "https://xivapi.com//i/003000/003403_hr1.png",
+          delay: 0,
+        },
+        start: 10,
+        end: 0,
+      },
+    ],
+  });
 
   const [cwidth, setCwidth] = useState(200);
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -110,7 +119,7 @@ export default function Page() {
         className="hbutton w-8 h-8 border-white border"
       />
 
-      <TimelineComponent />
+      <TimelineComponent timeline={timeline} />
 
       <div className="grow">
         <GetSkillsForClass classjob={classjob} />

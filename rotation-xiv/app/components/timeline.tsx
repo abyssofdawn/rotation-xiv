@@ -1,80 +1,144 @@
-'use client';;
-import { useRef, useEffect, useState } from "react";
+"use client";
+import { useRef, useEffect, useState, MouseEvent } from "react";
 import { Timeline } from "../utils";
 import * as d3 from "d3";
 
-export function TimelineComponent(props: {timeline?: Timeline}) {
-    const svgRef = useRef<SVGSVGElement>(null)
-    const [transform, setTransform] = useState(new d3.ZoomTransform(1, 0, 0))
-    
-    const height = 96
+function pToS(p: number, transform: d3.ZoomTransform, timeScale: number) {
+  return (p - transform.x) * timeScale;
+}
 
-    useEffect(() => {
+function sToP(s: number, scale: number, pps: number, t: d3.ZoomTransform) {
+  return s * scale * pps * t.k;
+}
 
-        if(!svgRef.current) return
+export function TimelineComponent(props: { timeline: Timeline }) {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [transform, setTransform] = useState(new d3.ZoomTransform(1, 0, 0));
+  const [timeScale, setTimeScale] = useState(1);
+  const [cursorLine, setCursorLine] = useState(0);
 
-        const data = [1, 2, 3, 4, 5, 6, 7, 8, 8, 8];
+  const data = props.timeline.skills;
 
-        const svg = d3.select(svgRef.current)
+  //length of timeline in seconds
+  const time = 60;
+  //pixels per second, useful for scaling data transforms
+  const pps = 20;
+  //set max zoom for d3.zoom
+  const maxzoom = 64;
 
-        const bt = 2*parseInt(svg.style('border'), 10)
-        const fw = parseInt(svg.style('width'), 10) - bt
-        const fh = parseInt(svg.style('height'), 10) - bt
-        const maxzoom = 64
-        const time = 30
-        const pps = 20 
-        const scalebyfw = 2*fw/(pps*time)
-        const finaltime = pps*time*scalebyfw
-        const x = d3.scaleLinear([0, time], [0, finaltime])
+  useEffect(() => {
+    if (!svgRef.current) return;
+    //temp
+    //const data = [1, 2, 3, 4, 5, 6, 7, 8, 9.5];
 
-        
-        const g = svg.selectAll('g').data([null]).join('g')
-        const im = svg.selectAll('g').data([null]).join('g')
-        
-        im.selectAll('image')
-          .data(data)
-          .enter()
-          .append('image')
-          .attr('x', 0)
-          .attr('y', 25)
-          .attr('width', 48)
-          .attr('height', 48)
-          .attr('href', (d) => `https://xivapi.com/i/000000/00000${d}_hr1.png`)
+    //get svg (if it exists)
+    const svg = d3.select(svgRef.current);
 
+    //get border thickness, frame width, frame height
+    const bt = 2 * parseInt(svg.style("border"), 10);
+    const fw = parseInt(svg.style("width"), 10) - bt;
+    const fh = parseInt(svg.style("height"), 10) - bt;
+    //get ratio by which frame width is larger than pixels for time
+    const scalebyfw = fw / (pps * time);
+    //seconds axis
+    const x = d3.scaleLinear([0, time], [0, fw]);
 
+    //im is all groups
+    const im = svg.selectAll("g").data([null]).join("g");
 
-        im.selectAll<SVGRectElement, null>('image').nodes().forEach((element: SVGRectElement, i) => {
-          let x = element.getAttribute('x')
-          if(!x) return
-          element.setAttribute('transform', 'translate('+(transform.k*pps*data[i])+', 0) scale(1)')
-        })
+    //generate images based on data input
+    im.selectAll("image")
+      .data(data)
+      .enter()
+      .append("image")
+      .attr("x", 0)
+      .attr("y", 25)
+      .attr("width", 48)
+      .attr("height", 48)
+      .attr("href", (d) => `${d.gcd.icon}`);
 
-        g.attr("transform", 'translate('+transform.x+',0) scale(1)')
+    im.append("rect")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", 2)
+      .attr("height", fh)
+      .attr("stroke", "black");
 
-        const gx = svg.append("g");
-        gx.attr("transform", `translate(0,${0})`)
+    im.selectAll<SVGRectElement, null>("rect")
+      .nodes()
+      .forEach((element: SVGRectElement) => {
+        element.setAttribute(
+          "transform",
+          "translate(" +
+            sToP(Math.floor(cursorLine), scalebyfw, pps, transform) +
+            ", 0)",
+        );
+      });
 
-        gx.call(d3.axisBottom(transform.rescaleX(x).interpolate(d3.interpolateRound)).ticks(fw/(pps*4), d3.timeFormat(".1f")));
+    //update transform for images without scaling
+    im.selectAll<SVGRectElement, null>("image")
+      .nodes()
+      .forEach((element: SVGRectElement, i) => {
+        let x = element.getAttribute("x");
+        if (!x) return;
+        element.setAttribute(
+          "transform",
+          "translate(" +
+            sToP(data[i].start, scalebyfw, pps, transform) +
+            ", 0) scale(1)",
+        );
+      });
 
-        const zoomBehavior = d3
-          .zoom<SVGSVGElement, unknown>()
-          .scaleExtent([1/2, maxzoom])
-          .translateExtent([
-            [0, 0],
-            [finaltime, fh],
-          ])
-          .on("zoom", (event: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
-            const zoomState = event.transform;
+    //shift groups by transform.x
+    im.attr("transform", "translate(" + transform.x + ",0) scale(1)");
 
-            setTransform(new d3.ZoomTransform(zoomState.k, zoomState.x,zoomState.y))
-          });
-          svg.call(zoomBehavior);
-          
-      }, [transform]);
+    //group for axis
+    const gx = svg.append("g");
 
-    return (
-        <div className="h-24" id="owner">
-          <svg ref={svgRef} className="w-full h-full rounded-md border-2"/>
-        </div>
-    )
+    //axis based on x (seconds axis)
+    gx.call(
+      d3
+        .axisBottom(transform.rescaleX(x).interpolate(d3.interpolateRound))
+        .ticks(fw / (pps * 4)),
+    );
+
+    //upon click/drag and scroll, update the transform
+    const zoomBehavior = d3
+      .zoom<SVGSVGElement, unknown>()
+      .scaleExtent([1, maxzoom])
+      .translateExtent([
+        [0, 0],
+        [fw, fh],
+      ])
+      .on("zoom", (event: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
+        //set new transform based on what just updated
+        const zoomState = event.transform;
+
+        setTransform(
+          new d3.ZoomTransform(zoomState.k, zoomState.x, zoomState.y),
+        );
+      });
+
+    //time scale is used for pixel coord => previous second
+    setTimeScale(time / fw / transform.k);
+
+    svg.call(zoomBehavior);
+  }, [transform, cursorLine]);
+
+  return (
+    <div className="h-24" id="owner">
+      <svg
+        ref={svgRef}
+        className="w-full h-full rounded-md border-2"
+        onMouseMove={(e: MouseEvent) => {
+          let point = pToS(d3.pointer(e)[0], transform, timeScale);
+          setCursorLine(point);
+        }}
+        onDragOver={(e: MouseEvent) => {
+          let point = pToS(d3.pointer(e)[0], transform, timeScale);
+          setCursorLine(point);
+        }}
+      />
+    </div>
+  );
 }

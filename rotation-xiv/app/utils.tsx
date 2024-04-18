@@ -20,6 +20,7 @@ export type Skill = {
 };
 export type TSkill = {
   skill: number; //the skill's id, so i don't pass kilobytes per skill
+  icon: string;
   delay: number; //the delay on the skill, used to offset and check "clipping"
 };
 
