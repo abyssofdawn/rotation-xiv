@@ -1,5 +1,4 @@
-'use client'
-
+'use client';;
 import { useRef, useEffect, useState } from "react";
 import { Timeline } from "../utils";
 import * as d3 from "d3";
@@ -14,7 +13,7 @@ export function TimelineComponent(props: {timeline?: Timeline}) {
 
         if(!svgRef.current) return
 
-        const data = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        const data = [1, 2, 3, 4, 5, 6, 7, 8, 8, 8];
 
         const svg = d3.select(svgRef.current)
 
@@ -22,32 +21,26 @@ export function TimelineComponent(props: {timeline?: Timeline}) {
         const fw = parseInt(svg.style('width'), 10) - bt
         const fh = parseInt(svg.style('height'), 10) - bt
         const maxzoom = 64
-        const time = 100
-        const pps = 24 
-        const x = d3.scaleLinear([0, time], [0, pps*(time)])
+        const time = 30
+        const pps = 20 
+        const scalebyfw = 2*fw/(pps*time)
+        const finaltime = pps*time*scalebyfw
+        const x = d3.scaleLinear([0, time], [0, finaltime])
 
         
         const g = svg.selectAll('g').data([null]).join('g')
         const im = svg.selectAll('g').data([null]).join('g')
         
-        g.selectAll('rect')
-          .data(data)
-          .enter()
-          .append('rect')
-          .attr('x', 0)
-          .attr('y', 0)
-          .attr('width', 2 )
-          .attr('height', 30)
-          .attr('fill', 'red')
         im.selectAll('image')
           .data(data)
           .enter()
           .append('image')
           .attr('x', 0)
           .attr('y', 25)
-          .attr('width', 40)
-          .attr('height', 40)
-          .attr('href', (d) => `https://xivapi.com/i/000000/00000${d}.png`)
+          .attr('width', 48)
+          .attr('height', 48)
+          .attr('href', (d) => `https://xivapi.com/i/000000/00000${d}_hr1.png`)
+
 
 
         im.selectAll<SVGRectElement, null>('image').nodes().forEach((element: SVGRectElement, i) => {
@@ -55,12 +48,6 @@ export function TimelineComponent(props: {timeline?: Timeline}) {
           if(!x) return
           element.setAttribute('transform', 'translate('+(transform.k*pps*data[i])+', 0) scale(1)')
         })
-        im.selectAll<SVGRectElement, null>('rect').nodes().forEach((element: SVGRectElement, i) => {
-          let x = element.getAttribute('x')
-          if(!x) return
-          element.setAttribute('transform', 'translate('+(transform.k*pps*data[i])+', 0) scale(1)')
-        })
-
 
         g.attr("transform", 'translate('+transform.x+',0) scale(1)')
 
@@ -71,10 +58,10 @@ export function TimelineComponent(props: {timeline?: Timeline}) {
 
         const zoomBehavior = d3
           .zoom<SVGSVGElement, unknown>()
-          .scaleExtent([1/(maxzoom), maxzoom])
+          .scaleExtent([1/2, maxzoom])
           .translateExtent([
             [0, 0],
-            [pps*time, fh],
+            [finaltime, fh],
           ])
           .on("zoom", (event: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
             const zoomState = event.transform;
