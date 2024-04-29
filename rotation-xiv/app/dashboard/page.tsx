@@ -1,20 +1,20 @@
-import parse from "html-react-parser";
+import parse from 'html-react-parser';
 
 async function SkillIcon() {
   let skilldata: { IconHD: string; Name_en: string; Description: string };
   let icon;
   let name;
-  let description = "";
-  await fetch("https://xivapi.com/Action/16138")
+  let description = '';
+  await fetch('https://xivapi.com/Action/16138')
     .then((res) => res.json())
     .then((data) => (skilldata = data))
     .then(() => {
       if (skilldata) {
-        icon = "https://xivapi.com/" + skilldata.IconHD;
+        icon = 'https://xivapi.com/' + skilldata.IconHD;
         name = skilldata.Name_en;
         description = skilldata.Description;
         if (description) {
-          description = description.replaceAll("\n\n", "<br>");
+          description = description.replaceAll('\n\n', '<br>');
         }
       }
     });
@@ -30,7 +30,7 @@ async function SkillIcon() {
       </picture>
       <div className=" divide-y w-fit">
         <h1>{name}</h1>
-        <div>{parse("<span>" + description)}</div>
+        <div>{parse('<span>' + description)}</div>
       </div>
     </div>
   );

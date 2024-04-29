@@ -1,13 +1,13 @@
-"use client";
-import parse from "html-react-parser";
-import useSWR from "swr";
+'use client';
+import parse from 'html-react-parser';
+import useSWR from 'swr';
 
-import { useState, useEffect } from "react";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { useSwitch } from "@mui/base";
-import { styled } from "@mui/system";
-import clsx from "clsx";
+import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { useSwitch } from '@mui/base';
+import { styled } from '@mui/system';
+import clsx from 'clsx';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -37,11 +37,11 @@ export function parse_description(description: string) {
   return (
     description
       //reformat weird artifacts in original data
-      .replaceAll("※", "\n\n※")
-      .replaceAll(" .", ".") //some skills have a space before the period
-      .replaceAll("<br />\n", "\n") //some skills have <br />\n instead of just \n
-      .replaceAll("\n", "<br>") //turn all \n into actual line breaks (parse doesn't understand \n)
-      .replaceAll("<br><br>", "<br>") //there are double spaces after a line, half each space
+      .replaceAll('※', '\n\n※')
+      .replaceAll(' .', '.') //some skills have a space before the period
+      .replaceAll('<br />\n', '\n') //some skills have <br />\n instead of just \n
+      .replaceAll('\n', '<br>') //turn all \n into actual line breaks (parse doesn't understand \n)
+      .replaceAll('<br><br>', '<br>') //there are double spaces after a line, half each space
       //skill descriptions
       .replaceAll(
         '<span style="color:#00cc22;">',
@@ -55,15 +55,15 @@ export function parse_description(description: string) {
         '<span style="color:#ff7b1a;">',
         '<span className="text-light-orange dark:text-dark-faded-orange">',
       ) //skill names
-      .replaceAll("<br><br>", "<br>") //there are double spaces after a line, half each space
+      .replaceAll('<br><br>', '<br>') //there are double spaces after a line, half each space
       //status descriptions
       .replaceAll(
-        "<UIForeground>F201F4</UIForeground><UIGlow>F201F5</UIGlow>",
+        '<UIForeground>F201F4</UIForeground><UIGlow>F201F5</UIGlow>',
         '<span className="text-light-orange dark:text-dark-faded-orange">',
       )
       .replaceAll(
-        "<UIGlow>01</UIGlow><UIForeground>01</UIForeground>",
-        "</span>",
+        '<UIGlow>01</UIGlow><UIForeground>01</UIForeground>',
+        '</span>',
       )
   );
 }
@@ -75,11 +75,11 @@ export function ParsedDescription({ description }: { description: string }) {
       {parse(
         description
           //reformat weird artifacts in original data
-          .replaceAll("※", "\n\n※")
-          .replaceAll(" .", ".") //some skills have a space before the period
-          .replaceAll("<br />\n", "\n") //some skills have <br />\n instead of just \n
-          .replaceAll("\n", "<br>") //turn all \n into actual line breaks (parse doesn't understand \n)
-          .replaceAll("<br><br>", "<br>") //there are double spaces after a line, half each space
+          .replaceAll('※', '\n\n※')
+          .replaceAll(' .', '.') //some skills have a space before the period
+          .replaceAll('<br />\n', '\n') //some skills have <br />\n instead of just \n
+          .replaceAll('\n', '<br>') //turn all \n into actual line breaks (parse doesn't understand \n)
+          .replaceAll('<br><br>', '<br>') //there are double spaces after a line, half each space
           //skill descriptions
           .replaceAll(
             '<span style="color:#00cc22;">',
@@ -93,15 +93,15 @@ export function ParsedDescription({ description }: { description: string }) {
             '<span style="color:#ff7b1a;">',
             '<span className="text-light-orange dark:text-dark-faded-orange">',
           ) //skill names
-          .replaceAll("<br><br>", "<br>") //there are double spaces after a line, half each space
+          .replaceAll('<br><br>', '<br>') //there are double spaces after a line, half each space
           //status descriptions
           .replaceAll(
-            "<UIForeground>F201F4</UIForeground><UIGlow>F201F5</UIGlow>",
+            '<UIForeground>F201F4</UIForeground><UIGlow>F201F5</UIGlow>',
             '<span className="text-light-orange dark:text-dark-faded-orange">',
           )
           .replaceAll(
-            "<UIGlow>01</UIGlow><UIForeground>01</UIForeground>",
-            "</span>",
+            '<UIGlow>01</UIGlow><UIForeground>01</UIForeground>',
+            '</span>',
           ),
       )}
     </>
@@ -110,31 +110,31 @@ export function ParsedDescription({ description }: { description: string }) {
 
 export function class_names() {
   return [
-    "gunbreaker",
-    "warrior",
-    "sage",
-    "white mage",
-    "dark knight",
-    "paladin",
-    "bard",
-    "black mage",
-    "dragoon",
-    "red mage",
-    "summoner",
-    "reaper",
-    "monk",
-    "astrologian",
-    "machinist",
-    "dancer",
-    "scholar",
-    "samurai",
-    "ninja",
+    'gunbreaker',
+    'warrior',
+    'sage',
+    'white mage',
+    'dark knight',
+    'paladin',
+    'bard',
+    'black mage',
+    'dragoon',
+    'red mage',
+    'summoner',
+    'reaper',
+    'monk',
+    'astrologian',
+    'machinist',
+    'dancer',
+    'scholar',
+    'samurai',
+    'ninja',
   ];
 }
 
 export function useSkillsForClass(classjob: string | null) {
   const { data, error, isLoading } = useSWR(
-    "/api/classjob?job=" + classjob,
+    '/api/classjob?job=' + classjob,
     (url) => fetcher(url),
   );
 
@@ -167,17 +167,17 @@ export function ThemeSwitch() {
     );
 
   const toggle_dark_theme = () => {
-    if (resolvedTheme === "light") {
-      setTheme("dark");
+    if (resolvedTheme === 'light') {
+      setTheme('dark');
     } else {
-      setTheme("light");
+      setTheme('light');
     }
   };
 
   return (
     <MUISwitch
       onChange={toggle_dark_theme}
-      checked={resolvedTheme === "dark"}
+      checked={resolvedTheme === 'dark'}
     />
   );
 }
@@ -193,11 +193,11 @@ function MUISwitch(props: any) {
 
   return (
     <span
-      className={clsx(stateClasses, "relative inline-block h-5 w-8 shrink-0")}
+      className={clsx(stateClasses, 'relative inline-block h-5 w-8 shrink-0')}
     >
       <span className="rounded-xl block bg-light-grey-1 dark:bg-dark-faded-green w-full h-full">
         <SwitchThumb
-          className={clsx(stateClasses, "absolute block bg-light-fg")}
+          className={clsx(stateClasses, 'absolute block bg-light-fg')}
         />
       </span>
       <SwitchInput
@@ -209,7 +209,7 @@ function MUISwitch(props: any) {
   );
 }
 
-const SwitchInput = styled("input")`
+const SwitchInput = styled('input')`
   position: absolute;
   top: 0;
   left: 0;
@@ -218,7 +218,7 @@ const SwitchInput = styled("input")`
   cursor: pointer;
 `;
 
-const SwitchThumb = styled("span")`
+const SwitchThumb = styled('span')`
   width: 18px;
   height: 18px;
   top: 1px;
@@ -229,7 +229,7 @@ const SwitchThumb = styled("span")`
 
   &::before {
     display: block;
-    content: "";
+    content: '';
     width: 100%;
     height: 100%;
 

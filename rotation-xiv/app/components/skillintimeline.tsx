@@ -1,4 +1,4 @@
-import { Skill } from "../utils";
+import { Skill } from '../utils';
 
 export default function TimelineSkill(props: { skill: Skill; time: number }) {
   const pos: string = `left-[${props.time}px]`;
