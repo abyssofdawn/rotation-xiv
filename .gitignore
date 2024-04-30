@@ -3,3 +3,5 @@
 /rotation-xiv/node_modules
 /rotation-xiv/public
 package-lock.json
+/rotation-xiv/.vscode
+/rotation-xiv/.contentlayer

@@ -1,9 +1,9 @@
-import { Inter, Merriweather } from "next/font/google";
+import { Rubik, Merriweather } from "next/font/google";
 
-export const inter = Inter({
+export const rubik = Rubik({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-rubik",
 });
 export const merriweather = Merriweather({
   subsets: ["latin"],

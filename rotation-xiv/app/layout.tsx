@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { merriweather, inter } from './fonts';
+import { merriweather, rubik } from './fonts';
 import './globals.css';
 import './providers';
 import { Navigation } from './nav';
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${merriweather.variable} ${inter.variable}`}
+      className={`${merriweather.variable} ${rubik.variable}`}
       suppressHydrationWarning
     >
       <body>

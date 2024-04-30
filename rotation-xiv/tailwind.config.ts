@@ -7,8 +7,10 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    './pages/**/*.{html,js}',
+    './components/**/*.{html,js}',
   ],
-  plugins: [require("flowbite/plugin")],
+  plugins: [require("flowbite/plugin"), require('@tailwindcss/typography')],
   /* everforest */
   theme: {
     colors: {

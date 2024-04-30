@@ -2,13 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .hbutton {
-  @apply p-2 rounded-md hover:bg-light-bg-5 hover:dark:bg-dark-bg-5 
+  @apply p-2 rounded-md hover:bg-light-bg-5 hover:dark:bg-dark-bg-5;
 }
 
 .hinput {
-  @apply rounded-md hover:bg-light-bg-5 hover:dark:bg-dark-bg-5 p-2 h-6 text-light-fg dark:text-dark-fg bg-light-bg-3 dark:bg-dark-bg-3 border-2 dark:border-dark-bg-5 border-light-grey-0
+  @apply rounded-md hover:bg-light-bg-5 hover:dark:bg-dark-bg-5 p-2 h-6 text-light-fg dark:text-dark-fg bg-light-bg-3 dark:bg-dark-bg-3 border-2 dark:border-dark-bg-5 border-light-grey-0;
 }
 
 .skillshadow {
@@ -18,7 +17,7 @@
 
 /* FIREFOX */
 @-moz-document url-prefix() {
-* {
+  * {
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
     scrollbar-base-color: blue;
@@ -26,7 +25,7 @@
 }
 
 .hinput:focus {
-  @apply outline-none ring-0 border-light-aqua dark:border-dark-dim-aqua
+  @apply outline-none ring-0 border-light-aqua dark:border-dark-dim-aqua;
 }
 
 /* CHROME */
@@ -43,9 +42,16 @@
 }
 
 h1 {
+  @apply text-3xl;
+  font-family: var(--font-merriweather);
+}
+
+h2 {
+  @apply text-2xl;
   font-family: var(--font-merriweather);
 }
 
 p {
+  @apply text-base my-4;
   font-family: var(--font-rubik);
 }
