@@ -20,12 +20,12 @@ const PostLayout = ({ params }: { params: { slug: string } }) => {
   const MDXContent = useMDXComponent(post.body.code);
 
   return (
-    <article className="mx-auto max-w-xl py-8 ">
+    <article className="mx-auto max-w-xl py-8 prose prose-everforest dark:prose-invert">
       <div className="mb-8 text-center">
         <time dateTime={post.date} className="mb-1 text-xs text-gray-600">
           {format(parseISO(post.date), 'LLLL d, yyyy')}
         </time>
-        <h1 className="text-light-dim-blue dark:text-dark-dim-blue text-center">
+        <h1 className="text-light-aqua dark:text-dark-faded-aqua text-center">
           {post.title}
         </h1>
       </div>

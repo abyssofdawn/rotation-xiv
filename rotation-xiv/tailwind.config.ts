@@ -3,14 +3,13 @@ import type { Config } from "tailwindcss";
 const config: Config = {
   darkMode: "class",
   content: [
-    "./node_modules/flowbite-react/lib/**/*.js",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     './pages/**/*.{html,js}',
     './components/**/*.{html,js}',
   ],
-  plugins: [require("flowbite/plugin"), require('@tailwindcss/typography')],
+  plugins: [require('@tailwindcss/typography')],
   /* everforest */
   theme: {
     colors: {
@@ -93,6 +92,46 @@ const config: Config = {
         },
       },
     },
+    extend: {
+      typography: ({theme}: {theme: any}) => ({
+        everforest: {
+          css: {
+            '--tw-prose-body':                theme('colors.light.fg'),
+            '--tw-prose-headings':            theme('colors.light.fg'),
+            '--tw-prose-lead':                theme('colors.light.fg'),
+            '--tw-prose-links':               theme('colors.light.dim.blue'),
+            '--tw-prose-bold':                theme('colors.light.fg'),
+            '--tw-prose-counters':            theme('colors.light.fg'),
+            '--tw-prose-bullets':             theme('colors.light.fg'),
+            '--tw-prose-hr':                  theme('colors.light.fg'),
+            '--tw-prose-quotes':              theme('colors.light.fg'),
+            '--tw-prose-quote-borders':       theme('colors.light.fg'),
+            '--tw-prose-captions':            theme('colors.light.fg'),
+            '--tw-prose-code':                theme('colors.light.fg'),
+            '--tw-prose-pre-code':            theme('colors.light.fg'),
+            '--tw-prose-pre-bg':              theme('colors.light.fg'),
+            '--tw-prose-th-borders':          theme('colors.light.fg'),
+            '--tw-prose-td-borders':          theme('colors.light.fg'),
+            '--tw-prose-invert-body':         theme('colors.dark.fg'),
+            '--tw-prose-invert-headings':     theme('colors.dark.fg'),
+            '--tw-prose-invert-lead':         theme('colors.dark.fg'),
+            '--tw-prose-invert-links':        theme('colors.dark.dim.blue'),
+            '--tw-prose-invert-bold':         theme('colors.dark.fg'),
+            '--tw-prose-invert-counters':     theme('colors.dark.fg'),
+            '--tw-prose-invert-bullets':      theme('colors.dark.fg'),
+            '--tw-prose-invert-hr':           theme('colors.dark.fg'),
+            '--tw-prose-invert-quotes':       theme('colors.dark.fg'),
+            '--tw-prose-invert-quote-borders':theme('colors.dark.fg'),
+            '--tw-prose-invert-captions':     theme('colors.dark.fg'),
+            '--tw-prose-invert-code':         theme('colors.dark.fg'),
+            '--tw-prose-invert-pre-code':     theme('colors.dark.fg'),
+            '--tw-prose-invert-pre-bg':       theme('colors.dark.fg'),
+            '--tw-prose-invert-th-borders':   theme('colors.dark.fg'),
+            '--tw-prose-invert-td-borders':   theme('colors.dark.fg'),
+          }
+        }
+      })
+    }
   },
 };
 export default config;
