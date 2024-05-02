@@ -24,8 +24,11 @@ export default function RootLayout({
       <body>
         <Providers>
           <div className="dark:bg-dark-bg-dim dark:text-dark-fg bg-light-bg-0 text-light-fg flex flex-col h-screen">
-            <Navigation />
+            <header>
+              <Navigation />
+            </header>
             <main className="max-h-full overflow-y-scroll">{children}</main>
+            <footer></footer>
           </div>
         </Providers>
       </body>

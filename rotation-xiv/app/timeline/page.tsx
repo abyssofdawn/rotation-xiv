@@ -5,7 +5,6 @@ import {
   class_names,
   parse_description,
   useSkillsForClass,
-  Timeline,
 } from '../utils';
 
 import { SkillSquare } from '../components/skillsquare';
@@ -92,7 +91,7 @@ export default function Page() {
     }
   };
   return (
-    <div className="flex-col relative">
+    <div className="flex-col relative max-w-3xl mx-auto">
       <input
         onChange={(e) => {
           setClassjob(e.target.value);

@@ -1,34 +1,28 @@
-// app/page.tsx
 import Link from 'next/link';
-import { compareDesc, format, parseISO } from 'date-fns';
-import { allPosts, Post } from 'contentlayer/generated';
-
-function PostCard(post: Post) {
-  return (
-    <Link
-      href={post.url}
-      className="text-light-dim-blue dark:text-dark-dim-blue text-center"
-    >
-      <div className="mb-8 border-2 rounded-md skillshadow p-2 hover:bg-light-bg-3 dark:hover:bg-dark-bg-1">
-        <h2 className="text-xl ">{post.title}</h2>
-        <time dateTime={post.date} className=" block text-xs text-gray-600">
-          {format(parseISO(post.date), 'LLLL d, yyyy')}
-        </time>
-      </div>
-    </Link>
-  );
-}
+import { BlogList } from './blog/list';
 
 export default function Home() {
-  const posts = allPosts.sort((a, b) =>
-    compareDesc(new Date(a.date), new Date(b.date)),
-  );
-
   return (
-    <div className="mx-auto max-w-xl py-8">
-      {posts.map((post, idx) => (
-        <PostCard key={idx} {...post} />
-      ))}
+    <div className="max-w-xl mx-auto flex flex-col w-full gap-y-4">
+      <div className="w-full">
+        <h1 className="text-center text-4xl flex-1 text-light-aqua dark:text-dark-faded-aqua my-2">
+          trance of thought
+        </h1>
+        <hr />
+      </div>
+      <div className="flex flex-col gap-y-2 w-full">
+        <h2>Tools</h2>
+        <Link href={'/timeline'} className="h-fit w-fit">
+          <button className="buttonoutlined text-md border-2">
+            <h2 className="text-base">Rotation Tool</h2>
+          </button>
+        </Link>
+        <hr />
+      </div>
+      <div className="w-full flex flex-col gap-y-2">
+        <h2>Blog</h2>
+        <BlogList />
+      </div>
     </div>
   );
 }

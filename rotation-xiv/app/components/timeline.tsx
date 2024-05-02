@@ -1,10 +1,5 @@
 'use client';
-import {
-  useRef,
-  useEffect,
-  useState,
-  MouseEvent
-} from 'react';
+import { useRef, useEffect, useState, MouseEvent } from 'react';
 import { Timeline } from '../utils';
 import * as d3 from 'd3';
 
@@ -150,54 +145,48 @@ export function TimelineComponent(props: { resetTimeline: boolean }) {
   }, [transform, dirty, timeline.skills]);
 
   return (
-    <div className="h-24"
-    onMouseMove={(e: MouseEvent) => {
-      let point = pxToSec(d3.pointer(e)[0] - 24, transform, timeScale);
-      setCursorLine(point);
-    }}
-    onDragOver={(e: React.DragEvent<HTMLDivElement>) => {
-      const pos = d3.pointer(e)[0]-24
-      let point = pxToSec(
-        pos,
-        transform,
-        timeScale,
-      );
-      setCursorLine(point);
-      e.preventDefault();
-    }}
-    onDragEnter={(e: React.DragEvent<HTMLDivElement>) => {
-      console.log(e.dataTransfer.getData('skill'));
-    }}
-    onDrop={(e: React.DragEvent<HTMLDivElement>) => {
-      let point = pxToSec(
-        d3.pointer(e)[0] - parseInt(e.dataTransfer.getData('dragx'), 10),
-        transform,
-        timeScale,
-      );
-      setCursorLine(point);
-      console.log(cursorLine);
-      console.log(e.dataTransfer.getData('skill'));
-      const icon = `https://xivapi.com${e.dataTransfer.getData('icon')}`;
-      console.log(icon);
-      setTimeline(() => {
-        timeline.skills.push({
-          gcd: {
-            skill: parseInt(e.dataTransfer.getData('skill'), 10),
-            delay: 0,
-            icon: icon,
-          },
-          end: 0,
-          start: Math.max(cursorLine, 0),
+    <div
+      className="h-24"
+      onMouseMove={(e: MouseEvent) => {
+        let point = pxToSec(d3.pointer(e)[0] - 24, transform, timeScale);
+        setCursorLine(point);
+      }}
+      onDragOver={(e: React.DragEvent<HTMLDivElement>) => {
+        const pos = d3.pointer(e)[0] - 24;
+        let point = pxToSec(pos, transform, timeScale);
+        setCursorLine(point);
+        e.preventDefault();
+      }}
+      onDragEnter={(e: React.DragEvent<HTMLDivElement>) => {
+        console.log(e.dataTransfer.getData('skill'));
+      }}
+      onDrop={(e: React.DragEvent<HTMLDivElement>) => {
+        let point = pxToSec(
+          d3.pointer(e)[0] - parseInt(e.dataTransfer.getData('dragx'), 10),
+          transform,
+          timeScale,
+        );
+        setCursorLine(point);
+        console.log(cursorLine);
+        console.log(e.dataTransfer.getData('skill'));
+        const icon = `https://xivapi.com${e.dataTransfer.getData('icon')}`;
+        console.log(icon);
+        setTimeline(() => {
+          timeline.skills.push({
+            gcd: {
+              skill: parseInt(e.dataTransfer.getData('skill'), 10),
+              delay: 0,
+              icon: icon,
+            },
+            end: 0,
+            start: Math.max(cursorLine, 0),
+          });
+          return timeline;
         });
-        return timeline;
-      });
-      setDirty(true);
-    }}>
-      <svg
-        ref={svgRef}
-        className="w-full h-full rounded-md border-2"
-        
-      />
+        setDirty(true);
+      }}
+    >
+      <svg ref={svgRef} className="w-full h-full rounded-md border-2" />
     </div>
   );
 }
