@@ -18,20 +18,98 @@ export type Skill = {
   Description: string;
   ActionCategory: { ID: number };
 };
-export type TSkill = {
-  skill: number; //the skill's id, so i don't pass kilobytes per skill
-  icon: string;
-  delay: number; //the delay on the skill, used to offset and check "clipping"
+export type TimedSkill = {
+  id: number; //the skill's id, so i don't pass kilobytes per skill
+  time: number; //global time of the skill in ms
+  time_end: number;
+  width: number;
+  time_shift: number; //relative time of the skill (gcd will be 0), when updated changes time
+  valid: boolean;
+};
+export type Block = {
+  gcd_shift: number;
+  gcd: number;
+  gcd_length: number;
+  gcd_end: number;
+  width: number;
+  skills: TimedSkill[];
 };
 
-export type Timeline = {
-  skills: {
-    gcd: TSkill; //the gcd
-    slots?: TSkill[]; //all ogcds
-    start: number; //start time
-    end: number; //end time = max of recast, sum of animation lock and skill delay
-  }[];
-};
+export class Blocks {
+  blocks: Block[];
+  constructor() {
+    this.blocks = [];
+  }
+
+  public update() {
+    const previous = this.blocks;
+    //starts at 0ms    
+    let time = 0;
+    //for every block,
+    this.blocks.forEach((block) => {
+      //the gcd timing is the current tracked time, and is shifted by holding
+      block.gcd=time + block.gcd_shift;
+      //then the current tracked gcdtime is reset for the new block
+      let gcdtime = 0;
+      //for every skill in the block,
+      block.skills.forEach((skill)=>{
+        //the skills start time is the current tracked gcd timer, then globalized
+        skill.time = gcdtime + block.gcd;
+        //the timer advances based on animation lock and intentionally holding it
+        gcdtime+=skill.width + skill.time_shift
+        //the end time is based on the current gcd timer, then globalized
+        skill.time_end = gcdtime + block.gcd;
+      })
+      //the "gcd recast" is locked at a minimum of gcd recast length, 
+      //but can be extended past that with animation locks on ogcds
+      block.width = Math.max(gcdtime, block.gcd_length);
+      //next available time is advanced by the width of the block
+      time+=block.width;
+      block.gcd_end = time;
+    });
+    if(!this.validated()){
+      this.blocks = previous;
+    }
+  }
+
+  validated() {
+    return true;
+  }
+
+  public add_block(block: Block, t: number){
+    let check = 0;
+    //find first index in which t is smaller than the middle of the block
+    while(t > this.blocks[check].gcd + this.blocks[check].width/2 && check < this.blocks.length){
+      check+=1;
+    }
+
+    if (check === this.blocks.length) {
+      this.blocks.push(block);
+    } else {
+      this.blocks.splice(check, 0, block);
+    }
+  }
+
+  public remove_block(idx: number) {
+    this.blocks.splice(idx, 1);
+  }
+
+  public end(){
+    return this.blocks[this.blocks.length-1];
+  }
+
+  public current_gcd_idx(time: number){
+    if(this.blocks.length === 0) return 0;
+    let idx = 0;
+    this.blocks.forEach((block) => {
+      if (time >= block.gcd && time < block.gcd_end){
+        idx = this.blocks.indexOf(block);
+      }
+    })
+    return idx;
+  }
+
+}
 
 export function parse_description(description: string) {
   return (
@@ -45,21 +123,21 @@ export function parse_description(description: string) {
       //skill descriptions
       .replaceAll(
         '<span style="color:#00cc22;">',
-        '<br><span className="text-light-green dark:text-dark-faded-green">',
+        '<br><span className="text-emerald-600 dark:text-emerald-300">',
       ) //effect, matches game color style and remaps it to tailwind
       .replaceAll(
         '<span style="color:#ffff66;">',
-        '<span className="text-light-yellow dark:text-dark-faded-yellow">',
+        '<span className="text-yellow-400 dark:text-amber-100">',
       ) //status names
       .replaceAll(
         '<span style="color:#ff7b1a;">',
-        '<span className="text-light-orange dark:text-dark-faded-orange">',
+        '<span className="text-orange-500 dark:text-orange-300">',
       ) //skill names
       .replaceAll('<br><br>', '<br>') //there are double spaces after a line, half each space
       //status descriptions
       .replaceAll(
         '<UIForeground>F201F4</UIForeground><UIGlow>F201F5</UIGlow>',
-        '<span className="text-light-orange dark:text-dark-faded-orange">',
+        '<span className="text-orange-500 dark:text-orange-300">',
       )
       .replaceAll(
         '<UIGlow>01</UIGlow><UIForeground>01</UIForeground>',
@@ -83,21 +161,21 @@ export function ParsedDescription({ description }: { description: string }) {
           //skill descriptions
           .replaceAll(
             '<span style="color:#00cc22;">',
-            '<br><span className="text-light-green dark:text-dark-faded-green">',
+            '<br><span className="text-emerald-600 dark:text-emerald-300">',
           ) //effect, matches game color style and remaps it to tailwind
           .replaceAll(
             '<span style="color:#ffff66;">',
-            '<span className="text-light-yellow dark:text-dark-faded-yellow">',
+            '<span className="text-yellow-400 dark:text-amber-100">',
           ) //status names
           .replaceAll(
             '<span style="color:#ff7b1a;">',
-            '<span className="text-light-orange dark:text-dark-faded-orange">',
+            '<span className="text-orange-500 dark:text-orange-300">',
           ) //skill names
           .replaceAll('<br><br>', '<br>') //there are double spaces after a line, half each space
           //status descriptions
           .replaceAll(
             '<UIForeground>F201F4</UIForeground><UIGlow>F201F5</UIGlow>',
-            '<span className="text-light-orange dark:text-dark-faded-orange">',
+            '<span className="text-orange-500 dark:text-orange-300">',
           )
           .replaceAll(
             '<UIGlow>01</UIGlow><UIForeground>01</UIForeground>',
@@ -195,9 +273,9 @@ function MUISwitch(props: any) {
     <span
       className={clsx(stateClasses, 'relative inline-block h-5 w-8 shrink-0')}
     >
-      <span className="rounded-xl block bg-light-grey-1 dark:bg-dark-faded-green w-full h-full">
+      <span className="rounded-xl block bg-slate-400 dark:bg-emerald-300 w-full h-full">
         <SwitchThumb
-          className={clsx(stateClasses, 'absolute block bg-light-fg')}
+          className={clsx(stateClasses, 'absolute block bg-slate-600')}
         />
       </span>
       <SwitchInput

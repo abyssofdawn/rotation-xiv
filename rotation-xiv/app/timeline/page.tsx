@@ -9,8 +9,9 @@ import {
 
 import { SkillSquare } from '../components/skillsquare';
 import { Draggable } from '../components/draggable';
-import { TimelineComponent } from '../components/timeline';
+import { TimelineComponent } from '../components/timeline/timeline';
 import React from 'react';
+import { ScaleProvider } from '../components/timeline/scale';
 
 type Search = { Pagination: {}; Results: [Skill]; SpeedMs: number };
 
@@ -128,9 +129,9 @@ export default function Page() {
       >
         reset timeline
       </button>
-
-      <TimelineComponent resetTimeline={reset} />
-
+      <ScaleProvider duration={120000}>
+        <TimelineComponent />
+      </ScaleProvider>
       <div className="grow">
         <GetSkillsForClass classjob={classjob} />
       </div>

@@ -7,8 +7,8 @@ export function Navigation() {
     <div
       className="
       border-b-2 flex items-center gap-2
-      bg-light-bg-5  border-light-fg
-      dark:bg-dark-bg-1 dark:border-dark-fg
+      bg-slate-300  border-slate-600
+      dark:bg-slate-800 dark:border-slate-100
       px-5
       py-1
     "

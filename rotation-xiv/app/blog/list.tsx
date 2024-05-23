@@ -111,14 +111,14 @@ export function BlogList() {
 function PostCard(post: Post) {
   return (
     <Link href={post.url}>
-      <div className="border-2 rounded-md skillshadow p-2 hover:bg-light-bg-3 dark:hover:bg-dark-bg-1">
-        <h2 className="text-xl text-light-aqua dark:text-dark-faded-aqua text-center">
+      <div className="border-2 rounded-md skillshadow p-2 hover:bg-white dark:hover:bg-slate-800">
+        <h2 className="text-xl text-emerald-400 dark:text-teal-500 text-center">
           {post.title}
         </h2>
         <div className="px-2">
           <time
             dateTime={post.date}
-            className="block text-xs text-light-grey-0 dark:text-dark-grey-0"
+            className="block text-xs text-slate-300 dark:text-white"
           >
             {format(parseISO(post.date), 'LLLL d, yyyy')}
           </time>

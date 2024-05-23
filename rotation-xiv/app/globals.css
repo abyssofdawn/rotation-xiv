@@ -3,30 +3,30 @@
 @tailwind utilities;
 
 .hbutton {
-  @apply rounded-none hover:bg-light-bg-5 hover:dark:bg-dark-bg-5;
+  @apply rounded-none hover:bg-slate-300 hover:dark:bg-slate-600;
 }
 
 .hinput {
-  @apply rounded-md hover:bg-light-bg-5 hover:dark:bg-dark-bg-5 text-light-fg dark:text-dark-fg bg-light-bg-3 dark:bg-dark-bg-3 border-2 dark:border-dark-bg-5 border-light-grey-0;
+  @apply rounded-md hover:bg-slate-300 hover:dark:bg-slate-600 text-slate-600 dark:text-slate-100 bg-white dark:bg-slate-800 border-2 dark:border-slate-600 border-slate-300;
 }
 
 .skillshadow {
-  @apply border-light-grey-0;
-  @apply dark:border-dark-bg-5;
+  @apply border-slate-300;
+  @apply dark:border-slate-600;
 }
 
 .hborder {
   @apply divide-x-2 border-2 rounded-md;
-  @apply border-light-grey-0 divide-light-grey-0;
-  @apply dark:border-dark-bg-5 dark:divide-dark-bg-5;
+  @apply border-slate-300 divide-slate-300;
+  @apply dark:border-slate-600 dark:divide-slate-600;
 }
 
 .link {
-  @apply text-light-dim-blue dark:text-dark-dim-blue;
+  @apply text-indigo-500 dark:text-indigo-300;
 }
 
 .buttonoutlined {
-  @apply order-2 rounded-md skillshadow p-2 hover:bg-light-bg-3 dark:hover:bg-dark-bg-1;
+  @apply order-2 rounded-md skillshadow p-2 hover:bg-white dark:hover:bg-slate-800;
 }
 
 /* FIREFOX */
@@ -39,7 +39,7 @@
 }
 
 .hinput:focus {
-  @apply outline-none ring-0 border-light-aqua dark:border-dark-dim-aqua;
+  @apply outline-none ring-0 border-emerald-400 dark:border-emerald-300;
 }
 
 /* CHROME */

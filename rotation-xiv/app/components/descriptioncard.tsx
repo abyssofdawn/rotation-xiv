@@ -4,8 +4,8 @@ import parse from 'html-react-parser';
 export function DescriptionCard({ skill }: { skill: Skill }) {
   return (
     <>
-      <div className="flex flex-row gap-2 w-full shrink-0 max-w-lg mx-auto bg-light-bg-3 dark:bg-dark-bg-2 rounded-md border dark:border-dark-bg-5 border-light-grey-0">
-        <div className="divide-y-2 grow dark:divide-dark-bg-5 divide-light-grey-0">
+      <div className="flex flex-row gap-2 w-full shrink-0 max-w-lg mx-auto bg-white dark:bg-slate-800 rounded-md border dark:border-slate-600 border-slate-300">
+        <div className="divide-y-2 grow dark:divide-slate-600 divide-slate-300">
           <div className="flex flex-row align-middle">
             <picture>
               <img

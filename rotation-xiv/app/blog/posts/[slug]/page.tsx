@@ -25,7 +25,7 @@ const PostLayout = ({ params }: { params: { slug: string } }) => {
         <time dateTime={post.date} className="mb-1 text-xs text-gray-600">
           {format(parseISO(post.date), 'LLLL d, yyyy')}
         </time>
-        <h1 className="text-light-aqua dark:text-dark-faded-aqua text-center">
+        <h1 className="text-emerald-400 dark:text-teal-500 text-center">
           {post.title}
         </h1>
       </div>

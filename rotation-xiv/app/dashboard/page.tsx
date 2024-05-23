@@ -23,7 +23,7 @@ async function SkillIcon() {
       <picture>
         <img
           alt="blah blah"
-          className="border-dark-bg-5 rounded-md border w-12"
+          className="border-slate-600 rounded-md border w-12"
           src={icon}
           title={name}
         />
@@ -38,7 +38,7 @@ async function SkillIcon() {
 
 export default async function Page() {
   return (
-    <div className="p-2 max-w-lg mx-auto dark:bg-dark-bg-2 rounded-md shadow-lg flex items-center gap-x-2">
+    <div className="p-2 max-w-lg mx-auto dark:bg-slate-800 rounded-md shadow-lg flex items-center gap-x-2">
       <SkillIcon />
     </div>
   );

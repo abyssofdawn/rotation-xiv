@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className="max-w-xl mx-auto flex flex-col w-full gap-y-4">
       <div className="w-full">
-        <h1 className="text-center text-4xl flex-1 text-light-aqua dark:text-dark-faded-aqua my-2">
+        <h1 className="text-center text-4xl flex-1 text-emerald-400 dark:text-teal-500 my-2">
           trance of thought
         </h1>
         <hr />

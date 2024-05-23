@@ -23,7 +23,7 @@ export default function RootLayout({
     >
       <body>
         <Providers>
-          <div className="dark:bg-dark-bg-dim dark:text-dark-fg bg-light-bg-0 text-light-fg flex flex-col h-screen">
+          <div className="dark:bg-slate-800 dark:text-slate-100 bg-white text-slate-600 flex flex-col h-screen">
             <header>
               <Navigation />
             </header>
